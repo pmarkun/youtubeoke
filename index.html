@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <title>Youtubeoke | Ônibus Hacker</title>
+        <meta name="description" content="Youtubeoke!">
+        <meta name="author" content="Transparência Hacker">
+
+        <link href="vendor/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        <style>
+            #busca-musica {
+                text-align: center;
+            }
+            
+            #busca-metas input {
+                width:460px;
+            }
+
+            .letra {
+                font-size:2em;
+                line-height: 1.5em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse">
+              <div class="navbar-inner">
+                    <a class="brand" href="#">Youtubeoke!</a>
+                    <a href="http://www.vagalume.com.br/api/">API Vagalume</a>
+              </div>
+        </div>
+        <div class="container">
+             <form id="busca-musica" class="form-search">
+                <input id="art" type="text" class="input-medium search-query"  placeholder="artista...">
+                <input id="mus" type="text" class="input-medium search-query"  placeholder="música...">
+                <button type="submit" class="btn">Buscar</button>
+            </form>
+        
+            <div id="musicas">
+                    <div id="{{mus.id}}" class="musica" data-template>
+                       <div class="musica span7">
+                            <b>{{mus[0].name}}</b> - {{art.name}}
+                            <pre class="letra">{{mus[0].text}}</pre>
+                       </div>
+                       
+                        <div class="span4">
+                            <b>Vídeo!</b><br />
+                            <iframe class="youtube-player" type="text/html" width="480px" height="295px" src="http://www.youtube.com/embed/{{mus[0].ytid}}?autoplay=1" allowfullscreen frameborder="0">
+                            </iframe>
+                        </div>
+                       <hr />            
+                    </div>
+            </div>
+        
+        </div>
+        <a href="https://github.com/pmarkun/monitordemetas"><img style="position: absolute; top: 0; right: 0; border: 0;" src="imgs/forkme.png" alt="Fork me on GitHub"></a>
+    <script src="vendor/js/jquery-1.5.1.min.js"></script>
+    <script src="vendor/js/tempo.js"></script>
+    <script>
+        data = {}
+
+        function buscaMusica(art, mus) {
+            var url = "http://www.vagalume.com.br/api/search.php?art=" + art + "&mus=" + mus + "&extra=ytid";
+            console.log(url);
+            console.log(mus);
+            $.getJSON(url, function(result) {
+                musicas.render(result);
+                data = result;
+                console.log(data);
+           });
+        }
+        $(function () {
+            musicas = Tempo.prepare("musicas");
+           console.log("Tada ima!");
+        
+           $("#busca-musica button").click(function () {
+                event.preventDefault();
+                var art = $("#busca-musica input#art").val();
+                var mus = $("#busca-musica input#mus").val();
+                buscaMusica(art, mus);
+           });
+        
+        });
+    </script>
+
+    </body>
+</html>
